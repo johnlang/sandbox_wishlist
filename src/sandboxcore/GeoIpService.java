@@ -1,10 +1,10 @@
 package sandboxcore;
 
+import de.hybris.platform.storelocator.GPS;
 import de.hybris.platform.storelocator.impl.DefaultGPS;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import sandboxcore.data.GeoLocationData;
 
 
 /**
@@ -16,10 +16,11 @@ public class GeoIpService
 	@Autowired RestTemplate sandBoxRestTemplate;
 
 
-	public String getLocationByIp(String ip)
+	public GPS getLocationByIp(String ip)
 	{
-		DefaultGPS resp =  sandBoxRestTemplate.getForObject(FREE_GEO_IP_URL + ip, DefaultGPS.class);
-		return null;
+		GeoLocationData geoLocationData = sandBoxRestTemplate.getForObject(FREE_GEO_IP_URL + ip, GeoLocationData.class);
+		GPS gpsIp = new DefaultGPS(geoLocationData.getLatitude(), geoLocationData.getLongitude());
+		return gpsIp;
 	}
 
 }
